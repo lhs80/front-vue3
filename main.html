@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>泛在化平台</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+    <!--外部配置文件-->
+    <script type="text/javascript" src="./js/envConfig.js"></script>
+    <script type="text/javascript" src="./js/xconference_v1.0.9.js"></script>
+    <!-- 动态配置畅写服务地址 begin -->
+    <script type="text/javascript">
+      let env = window.location.href;
+      const script = document.createElement("script");
+
+      if (env.indexOf("localhost") !== -1) {
+        //本地调试
+        script.src = "https://192.168.10.254:8443/changxieoffice/web-apps/apps/api/documents/api.js?v=<%= Date.now() %>";
+      } else {
+        script.src = "/changxieoffice/web-apps/apps/api/documents/api.js?v=<%= Date.now() %>";
+      }
+      document.head.appendChild(script);
+    </script>
+    <script>
+      window.versionTime = parseInt("<%= new Date().getTime()%>");
+    </script>
+  </body>
+</html>

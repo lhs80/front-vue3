@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>浏览器下载</title>
+    <script type="text/javascript" src="envConfig.js"></script>
+    <script>
+      function checkBrowser() {
+        const ua = window.navigator.userAgent.toLowerCase();
+        //win10自带的浏览器edge中的userAgent中同时包含chrome和edg;
+        const isChrome = ua.indexOf("chrome") >= 0 && ua.indexOf("edg") === -1; //是不是chrome浏览器；
+        //如果不是chrome浏览器,跳转到下载页面；
+        if (isChrome) {
+          //chrome浏览器但版本小于87,跳转到下载页面；
+          const chromeVersion = ua.match(/chrome\/([\d\.]+)/)[1].split("."); //获取版本号;
+
+          if (chromeVersion[0] >= 87) {
+            window.location.href = "./main.html";
+          } else {
+            // checkEnvironment()
+          }
+        } else {
+          // checkEnvironment()
+        }
+      }
+
+      /**
+       * 检测系统版本
+       * **/
+      function checkEnvironment() {
+        let appName = "";
+        const sysVersion = (function () {
+          const ua = window.navigator.platform.toLowerCase() || window.navigator.userAgent.toLowerCase();
+          return {
+            isWin32: /win32/.test(ua) || /wow32/.test(ua),
+            isWin64: /win64/.test(ua) || /wow64/.test(ua),
+            isLinux64: /linux x86/.test(ua),
+          };
+        })();
+        if (sysVersion.isWin32) appName = "chrome_32.exe";
+        else if (sysVersion.isWin64) appName = "chrome_64.exe";
+        else if (sysVersion.isLinux64) appName = "chrome_amd64.deb";
+        else appName = "chrome_arm64.deb";
+        let link = document.createElement("a");
+        link.style.display = "none";
+        link.href = "../chrome/" + appName;
+        console.log(link.href);
+        link.setAttribute("download", appName);
+        document.body.appendChild(link);
+        link.click();
+      }
+
+      function goNext() {
+        window.location.href = "./main.html";
+      }
+      checkBrowser();
+    </script>
+    <style>
+      body,
+      html {
+        padding: 0;
+        margin: 0;
+      }
+
+      .download-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+        height: 100vh;
+        position: relative;
+        overflow: auto;
+        background: url("images/bg-download.png") no-repeat top left / 100% 100%;
+      }
+
+      .download-wrapper img {
+        width: 120px;
+      }
+
+      .download-wrapper .tip-title {
+        font-size: 26px;
+        font-weight: 500;
+        color: #051c33;
+        margin-top: 30px;
+        margin-bottom: 22px;
+      }
+
+      .download-wrapper .tip-content {
+        width: 530px;
+        color: #051c33;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 1.5;
+        text-align: center;
+      }
+
+      .download-wrapper .btn-download {
+        display: block;
+        width: 150px;
+        height: 46px;
+        line-height: 46px;
+        background: #2292f5;
+        border-radius: 23px;
+        color: white;
+        font-size: 16px;
+        text-align: center;
+        margin-top: 9.6%;
+        cursor: pointer;
+      }
+
+      .download-wrapper .text-skip {
+        font-size: 12px;
+        margin-top: 10px;
+        color: #333;
+        text-decoration: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="download-wrapper">
+      <div><img src="images/img-chrome-logo.png" alt="" /></div>
+      <p class="tip-title">使用提示</p>
+      <p class="tip-content">建议使用chrome刘览器，系统检测到您当前使用的浏览器不是推荐版本， 请点击下方按钮下载，安装完成后再用chrome浏览器打开重试！</p>
+      <div class="btn-download" onclick="checkEnvironment()">下载推荐版本</div>
+      <div class="text-skip" onclick="goNext()">跳过</div>
+    </aside>
+  </body>
+</html>
